@@ -1,6 +1,9 @@
 package com.example.flixster.adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.flixster.R;
 import com.example.flixster.models.Movie;
 
@@ -60,7 +66,31 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         public void bind(Movie movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
-            Glide.with(context).load(movie.getPosterPath()).into(ivPoster);
+            String imgURL;
+
+            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                imgURL = movie.getBackdropPath();
+            } else{
+                imgURL = movie.getPosterPath();
+            }
+
+            Glide.with(context)
+                    .load(imgURL)
+                    .into(ivPoster);
+//            Glide.with(context)
+//                    .asBitmap()
+//                    .load(movie.getPosterPath())
+//                    .into(new CustomTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                            int width = resource.getWidth();
+//                            int height = resource.getHeight();
+//                        }
+//
+//                        @Override
+//                        public void onLoadCleared(@Nullable Drawable placeholder) {
+//                        }
+//                    });
         }
     }
 }
